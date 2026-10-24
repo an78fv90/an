@@ -10,10 +10,10 @@ export const catalog: CatalogItem[] = [
   ...mk("couples", [["Together", "Two clasped hands in matte bronze.", 5600, "10×12 in", 16], ["Forever Us", "Interlaced fingers with rings preserved.", 7400, "12×16 in", 18], ["Our Story", "Hands plus a dated timeline engraving.", 9200, "14×18 in", 21]]),
 ];
 export const categories: { slug: string; label: string; blurb: string; imageUrl: string }[] = [
-  { slug: "baby", label: "Baby Hand & Foot Casting", blurb: "The smallest details, held.", imageUrl: "/gallery/kids.png" },
-  { slug: "kids", label: "Kids Casting", blurb: "A little moment from every growing year.", imageUrl: "/gallery/kids.png" },
-  { slug: "couples", label: "Couple Hand Casting", blurb: "Two hands, one promise.", imageUrl: "/gallery/couples.png" },
-  { slug: "elderly", label: "Elderly Casting", blurb: "A lifetime of love, held in your hands.", imageUrl: "/gallery/elderly.png" },
-  { slug: "elderly-baby", label: "Elderly + Baby Casting", blurb: "Two generations, together in one keepsake.", imageUrl: "/gallery/elderly-baby.png" },
+  { slug: "baby", label: "Baby Hand & Foot Casting", blurb: "The smallest details, held.", imageUrl: "/baby-hand-foot-casting.png" },
+  { slug: "kids", label: "Kids Casting", blurb: "A little moment from every growing year.", imageUrl: "/collections/kids.png" },
+  { slug: "couples", label: "Couple Hand Casting", blurb: "Two hands, one promise.", imageUrl: "/collections/couples.png" },
+  { slug: "elderly", label: "Elderly Casting", blurb: "A lifetime of love, held in your hands.", imageUrl: "/collections/elderly.png" },
+  { slug: "elderly-baby", label: "Elderly + Baby Casting", blurb: "Two generations, together in one keepsake.", imageUrl: "/collections/elderly-baby.png" },
 ];
 export const coupons: Record<string, number> = { WELCOME10: 10, EVER15: 15 };
