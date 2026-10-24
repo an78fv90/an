@@ -1,0 +1,261 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum Category {
+  BABY
+  COUPLES
+  FAMILY
+  PETS
+}
+
+enum OrderStatus {
+  BOOKING_CONFIRMED
+  CASTING_SCHEDULED
+  CASTING_COMPLETED
+  PREPARATION
+  FINISHING
+  FRAMING
+  QUALITY_CHECK
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PayStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum Visibility {
+  PRIVATE
+  LINK
+  QR
+}
+
+enum ChatSender {
+  CUSTOMER
+  ADMIN
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  passwordHash String?
+  image        String?
+  role         Role          @default(CUSTOMER)
+  phone        String?
+  createdAt    DateTime      @default(now())
+  admin        Admin?
+  bookings     Booking[]
+  orders       Order[]
+  reviews      Review[]
+  memories     Memory[]
+  designs      SavedDesign[]
+  chat         ChatConversation?
+}
+
+model ChatConversation {
+  id        String        @id @default(cuid())
+  userId    String        @unique
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  ChatMessage[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model ChatMessage {
+  id             String          @id @default(cuid())
+  conversationId String
+  conversation   ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         ChatSender
+  body           String          @db.VarChar(2000)
+  createdAt      DateTime        @default(now())
+
+  @@index([conversationId, createdAt])
+}
+
+model Admin {
+  id          String @id @default(cuid())
+  userId      String @unique
+  user        User   @relation(fields: [userId], references: [id])
+  permissions String[]
+}
+
+model Product {
+  id            String      @id @default(cuid())
+  slug          String      @unique
+  name          String
+  category      Category
+  description   String
+  priceInr      Int
+  size          String
+  productionDays Int
+  imageUrl      String
+  options       String[]
+  active        Boolean     @default(true)
+  items         OrderItem[]
+  reviews       Review[]
+}
+
+model Package {
+  id          String    @id @default(cuid())
+  name        String
+  category    Category
+  priceInr    Int
+  features    String[]
+  durationMin Int
+  popular     Boolean   @default(false)
+  bookings    Booking[]
+}
+
+model Customization {
+  id         String      @id @default(cuid())
+  cast       String
+  frame      String
+  background String
+  engraving  Json
+  size       String
+  extras     String[]
+  items      OrderItem[]
+  bookings   Booking[]
+}
+
+model Booking {
+  id               String          @id @default(cuid())
+  userId           String
+  user             User            @relation(fields: [userId], references: [id])
+  packageId        String
+  package          Package         @relation(fields: [packageId], references: [id])
+  customizationId  String?
+  customization    Customization?  @relation(fields: [customizationId], references: [id])
+  homeVisit        Boolean         @default(false)
+  notes            String?
+  slot             DateTime
+  status           String          @default("CONFIRMED")
+  createdAt        DateTime        @default(now())
+
+  @@index([slot])
+}
+
+model Order {
+  id        String      @id @default(cuid())
+  number    String      @unique
+  userId    String
+  user      User        @relation(fields: [userId], references: [id])
+  status    OrderStatus @default(BOOKING_CONFIRMED)
+  subtotal  Int
+  discount  Int         @default(0)
+  tax       Int
+  delivery  Int
+  total     Int
+  couponId  String?
+  coupon    Coupon?     @relation(fields: [couponId], references: [id])
+  items     OrderItem[]
+  payment   Payment?
+  memory    Memory?
+  createdAt DateTime    @default(now())
+}
+
+model OrderItem {
+  id               String         @id @default(cuid())
+  orderId          String
+  order            Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId        String
+  product          Product        @relation(fields: [productId], references: [id])
+  customizationId  String?
+  customization    Customization? @relation(fields: [customizationId], references: [id])
+  qty              Int            @default(1)
+  unitPrice        Int
+}
+
+model Payment {
+  id               String    @id @default(cuid())
+  orderId          String    @unique
+  order            Order     @relation(fields: [orderId], references: [id])
+  provider         String
+  providerOrderId  String?
+  providerPaymentId String?
+  amount           Int
+  status           PayStatus @default(PENDING)
+  createdAt        DateTime  @default(now())
+}
+
+model Review {
+  id        String    @id @default(cuid())
+  userId    String?
+  user      User?     @relation(fields: [userId], references: [id])
+  productId String?
+  product   Product?  @relation(fields: [productId], references: [id])
+  name      String
+  category  Category
+  rating    Int
+  body      String
+  verified  Boolean   @default(true)
+  published Boolean   @default(true)
+}
+
+model GalleryItem {
+  id        String   @id @default(cuid())
+  title     String
+  category  Category
+  imageUrl  String
+  afterUrl  String?
+  story     String?
+  featured  Boolean  @default(false)
+}
+
+model Memory {
+  id        String        @id @default(cuid())
+  publicId  String        @unique @default(cuid())
+  userId    String
+  user      User          @relation(fields: [userId], references: [id])
+  orderId   String?       @unique
+  order     Order?        @relation(fields: [orderId], references: [id])
+  title     String
+  bornOn    DateTime?
+  story     String?
+  visibility Visibility   @default(PRIVATE)
+  media     MemoryMedia[]
+}
+
+model MemoryMedia {
+  id        String    @id @default(cuid())
+  memoryId  String
+  memory    Memory    @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+  kind      String
+  url       String
+  caption   String?
+  takenOn   DateTime?
+}
+
+model SavedDesign {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  name      String
+  config    Json
+  createdAt DateTime @default(now())
+}
+
+model Coupon {
+  id        String    @id @default(cuid())
+  code      String    @unique
+  percentOff Int
+  active    Boolean   @default(true)
+  expiresAt DateTime?
+  orders    Order[]
+}

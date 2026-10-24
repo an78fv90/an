@@ -1,0 +1,1 @@
+export default function L() { return <div className="mx-auto max-w-4xl space-y-4 px-6 pt-40" aria-busy="true">{[60, 90, 75].map(w => <div key={w} className="h-10 animate-pulse rounded-xl bg-ink/10" style={{ width: `${w}%` }} />)}</div>; }

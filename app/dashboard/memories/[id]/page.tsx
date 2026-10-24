@@ -1,0 +1,2 @@
+import Link from "next/link";
+export default async function P({ params }: { params: Promise<{ id: string }> }) { const id = (await params).id; return <main className="mx-auto max-w-3xl px-6 pb-20 pt-36"><h1 className="font-display text-5xl">Aarav's First Year</h1><p className="mt-3">Visibility: Anyone with the link. Add photos, videos and messages here once uploads are connected.</p><Link href={`/memory/${id}`} className="mt-6 inline-block underline">View public page and QR code</Link></main>; }

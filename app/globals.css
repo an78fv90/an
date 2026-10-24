@@ -1,0 +1,26 @@
+@tailwind base;@tailwind components;@tailwind utilities;
+:root{--gold:#C9A24B;--gold2:#E7CF8E;--ivory:#F1E8D6;--velvet:#0C0A08}
+html{scroll-behavior:smooth}
+body{background:radial-gradient(ellipse at 50% -10%,#221A11 0%,#0C0A08 62%) fixed;color:var(--ivory);font-family:var(--font-body),sans-serif;-webkit-font-smoothing:antialiased}
+h1.font-display{background:linear-gradient(180deg,#F6E7B8,#C9A24B);-webkit-background-clip:text;background-clip:text;color:transparent}
+:focus-visible{outline:2px solid var(--gold2);outline-offset:3px}
+input,textarea,select{background:rgba(255,255,255,.05)}
+::placeholder{color:rgba(241,232,214,.45)}
+select option{background:#15110D;color:#F1E8D6}
+a.bg-ink,button.bg-ink{background-image:linear-gradient(135deg,#EBD596,#C9A24B);color:#0C0A08}
+.border-ink{border-color:var(--gold)}
+.border-ink\/10,.border-ink\/15{border-color:rgba(201,162,75,.2)}
+.border-ink\/20,.border-ink\/25,.border-ink\/30{border-color:rgba(201,162,75,.4)}
+.bg-ink\/10{background-color:rgba(255,255,255,.12)}.bg-ink\/20{background-color:rgba(255,255,255,.22)}
+.bg-white\/60{background-color:rgba(255,255,255,.04);backdrop-filter:blur(6px)}
+.bg-mulberry{border:1px solid rgba(201,162,75,.25)}
+.text-red-700{color:#FF9B8F}
+.glass{background:rgba(255,255,255,.06);backdrop-filter:blur(14px);border:1px solid rgba(201,162,75,.3)}
+.gold-text{background:linear-gradient(180deg,#F6E7B8,#C9A24B);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ornate{position:relative;border:1px solid var(--gold);box-shadow:inset 0 0 0 7px #0C0A08,inset 0 0 0 8px rgba(201,162,75,.55)}
+.ornate::before,.ornate::after{content:"❦";position:absolute;top:10px;color:var(--gold);font-size:22px;line-height:1}
+.ornate::before{left:14px}.ornate::after{right:14px;transform:scaleX(-1)}
+.divider{display:flex;align-items:center;gap:12px;color:var(--gold)}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.divider::after{content:"";}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
